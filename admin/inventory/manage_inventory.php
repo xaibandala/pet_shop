@@ -8,7 +8,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     }
 }
 ?>
-<div class="card card-outline card-info">
+<div class="card card-outline card-info mt-4">
 	<div class="card-header">
 		<h3 class="card-title"><?php echo isset($id) ? "Update ": "Create New " ?> Inventory</h3>
 	</div>
@@ -28,24 +28,22 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                 </select>
 			</div>
             <div class="form-group">
-				<label for="size" class="control-label">Size</label>
-                <select name="size" id="size" class="custom-select select2" required>
-                    <option value=""></option>
-                    <?php
-                        $qry = $conn->query("SELECT * FROM `sizes`");
-                        while($row= $qry->fetch_assoc()):
-                    ?>
-                    <option <?php echo isset($size) && $size == strtoupper($row['size']) ? 'selected' : '' ?>><?php echo strtoupper($row['size']) ?></option>
-                    <?php endwhile; ?>
-                </select>
-			</div>
-            <div class="form-group">
-				<label for="unit" class="control-label">Unit</label>
-                <input type="text" class="form-control form" required name="unit" value="<?php echo isset($unit) ? $unit : '' ?>">
-            </div>
-            <div class="form-group">
-				<label for="quantity" class="control-label">Beginning Quanatity</label>
+				<label for="quantity" class="control-label">Beginning Quantity</label>
                 <input type="number" class="form-control form" required name="quantity" value="<?php echo isset($quantity) ? $quantity : '' ?>">
+                <?php if(isset($id)): 
+                    $stock_status = '';
+                    if($quantity <= 0) {
+                        $stock_status = 'text-danger';
+                    } else if($quantity <= 5) {
+                        $stock_status = 'text-warning';
+                    } else {
+                        $stock_status = 'text-success';
+                    }
+                ?>
+                <small class="text-muted">
+                    Current Stock: <span class="<?php echo $stock_status ?>"><?php echo $quantity ?></span>
+                </small>
+                <?php endif; ?>
             </div>
             <div class="form-group">
 				<label for="price" class="control-label">Price</label>
